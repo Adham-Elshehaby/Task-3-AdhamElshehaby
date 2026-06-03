@@ -1,0 +1,52 @@
+#list of movies to choose from.
+movies = [
+    {"title": "Movie A", "genre": "action", "mood": "intense", "length": 152, "rating": 9.0},
+    {"title": "Movie B", "genre": "comedy", "mood": "light", "length": 85, "rating": 7.4},
+    {"title": "Movie C", "genre": "thriller", "mood": "intense", "length": 88, "rating": 8.0},
+    {"title": "Movie D", "genre": "drama", "mood": "emotional", "length": 120, "rating": 7.8},
+    {"title": "Movie E", "genre": "horror", "mood": "intense", "length": 95, "rating": 7.2},    
+]
+
+#taking user input to filter movies based on user preferences.
+available_genres = ["action", "comedy", "drama", "thriller", "horror"]
+user_genre = input("Pick a Movie Genre: ")
+while user_genre not in available_genres:
+    print("Invalid genre selected. Please choose from the available genres.")   
+    user_genre = input("Pick a Movie Genre: ")
+
+available_moods = ["intense", "light", "emotional"]
+user_mood = input("Pick a Movie Mood: ")
+while user_mood not in available_moods:
+    print("Invalid mood selected. Please choose from the available moods.")
+    user_mood = input("Pick a Movie Mood: ")
+
+user_minlength = int(input("Pick a Minimum Movie Length: "))
+user_maxlength = int(input("Pick a Maximum Movie Length: "))
+
+#creating recommnendations list, initially empty, to be appended to based on user choices.
+recommendations = []
+
+for movie in movies:
+    #hard filter — skip if rating is under 7.5
+    if movie["rating"] < 7.5:
+        continue
+
+    #count soft matches
+    score = 0
+    if movie["genre"] == user_genre:
+        score += 1
+    if movie["mood"] == user_mood:
+        score += 1
+    if user_minlength <= movie["length"] <= user_maxlength:
+        score += 1
+    #count soft matches
+    if score >= 2:
+        recommendations.append((movie["title"], movie["rating"]))
+
+#handling the case where user choices don't match any available movies.
+if len(recommendations) == 0:
+        print("No movies found matching your criteria.")
+        
+#printing the recommended movies and their ratings.        
+for movie in recommendations:
+    print(f"{movie[0]} (Rating: {movie[1]})")
